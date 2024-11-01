@@ -1,0 +1,22 @@
+# Core dependencies
+streamlit==1.28.1
+pandas==2.1.2
+openpyxl==3.1.2
+
+# Data processing
+numpy==1.26.1
+uuid==1.30
+
+# File handling
+python-magic==0.4.27
+pathlib==1.0.1
+
+# Excel support
+xlrd==2.0.1
+XlsxWriter==3.1.9
+
+# Type hints
+typing-extensions==4.8.0
+
+# Memory optimization
+psutil==5.9.6
