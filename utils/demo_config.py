@@ -42,7 +42,7 @@ DEFAULT_MAPPINGS = {
     }
 }
 
-DEMO_DESCRIPTIONS = {
+HELP_DESCRIPTIONS = {
     "welcome": """
     ## Bienvenue dans l'assistant d'import Kimaiko!
     
@@ -52,50 +52,44 @@ DEMO_DESCRIPTIONS = {
     - Générant les fichiers au format attendu par Kimaiko
     """,
     
-    "demo_mode": """
-    🎮 Mode Démonstration
+    "example_files": """
+    ### 📋 Exemples de Fichiers
     
-    Les fichiers et mappings sont pré-configurés pour vous montrer le fonctionnement.
-    Suivez les explications à chaque étape pour comprendre le processus.
-    """,
-    
-    "templates": """
-    ### 📋 Les modèles Kimaiko
-    
-    En mode démo, nous avons déjà chargé 3 modèles :
+    Les fichiers d'exemple fournis montrent la structure type :
     1. **Fournisseurs** : Structure pour les données fournisseurs
     2. **Articles** : Structure pour le catalogue produits
     3. **Factures** : Structure pour les factures avec références
     
-    Ces modèles représentent le format attendu par Kimaiko.
+    Ces exemples illustrent le format attendu par Kimaiko.
     """,
     
-    "source_files": """
-    ### 📥 Les données sources
+    "data_import": """
+    ### 📥 Import de Données
     
-    En mode démo, nous avons 3 fichiers de l'ancien système :
-    1. **Ancien Fournisseurs** : Liste des fournisseurs
-    2. **Ancien Articles** : Catalogue des produits
-    3. **Ancien Factures** : Historique des factures
+    Pour importer vos données :
+    1. Chargez vos fichiers Excel
+    2. Vérifiez la structure détectée
+    3. Configurez les mappings si nécessaire
+    4. Validez et exportez les données
     
-    Remarquez les différences de structure avec les modèles Kimaiko.
+    L'assistant vous guidera à chaque étape.
     """,
     
-    "mapping": """
-    ### 🔗 Mapping et génération des fichiers
+    "mapping_help": """
+    ### 🔗 Guide de Mapping
     
-    En mode démo, le mapping est pré-configuré :
+    Le mapping permet de :
     
-    1. **Fournisseurs** → **Ancien Fournisseurs**
-       - Les noms de colonnes sont mappés automatiquement
-       - Un UUID unique est généré pour chaque fournisseur
+    1. **Lier les données**
+       - Faire correspondre les colonnes sources et cibles
+       - Générer des UUID uniques pour chaque entrée
     
-    2. **Articles** → **Ancien Articles**
-       - Les données sont mappées vers le format Kimaiko
-       - L'ID_Fournisseur est remplacé par l'UUID correspondant
+    2. **Gérer les relations**
+       - Mapper les données entre fichiers
+       - Maintenir les références avec des UUID
     
-    3. **Factures** → **Ancien Factures**
-       - Les références vers les fournisseurs et articles sont mises à jour
-       - Les UUID maintiennent les liens entre les fichiers
+    3. **Valider les données**
+       - Vérifier la cohérence des mappings
+       - Assurer l'intégrité des relations
     """
 }

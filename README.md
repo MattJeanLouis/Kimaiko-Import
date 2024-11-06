@@ -1,6 +1,6 @@
-# Import Kimaiko - Guide d'Utilisation
+# Kimaiko - Guide d'Utilisation
 
-Ce logiciel permet d'importer et de traiter des données depuis des fichiers Excel. L'outil est flexible et peut traiter n'importe quel nombre de fichiers Excel avec leurs propres structures de données.
+Application de gestion et d'import de données avec fonctionnalités adaptatives selon la configuration API.
 
 ## Installation avec Docker
 
@@ -11,12 +11,12 @@ Ce logiciel permet d'importer et de traiter des données depuis des fichiers Exc
 
 2. Construisez l'image Docker :
    ```
-   docker build -t import-kimaiko .
+   docker build -t kimaiko-import .
    ```
 
 3. Lancez le conteneur :
    ```
-   docker run -p 8501:8501 import-kimaiko
+   docker run -p 8501:8501 kimaiko-import
    ```
 
 4. Ouvrez votre navigateur et accédez à :
@@ -24,64 +24,113 @@ Ce logiciel permet d'importer et de traiter des données depuis des fichiers Exc
    http://localhost:8501
    ```
 
-## Utilisation
+## Niveaux de Fonctionnalités
 
-### Mode Standard
+L'application s'adapte automatiquement selon votre configuration API :
 
-1. Importez vos modèles Kimaiko (Étape 1) :
-   - Chargez les fichiers Excel qui définissent la structure cible
-   - L'interface affichera les colonnes requises pour chaque modèle
+### 🌱 Niveau Basic
+- Disponible sans configuration API
+- Fonctionnalités de base pour tous les modules
+- Parfait pour découvrir l'application
 
-2. Importez vos données sources (Étape 2) :
-   - Chargez autant de fichiers Excel que nécessaire
-   - Chaque fichier peut avoir sa propre structure
-   - Un aperçu des données sera affiché pour chaque fichier
+### 🤖 Niveau OpenAI
+- Activé avec une clé API OpenAI valide
+- Fonctionnalités IA avancées :
+  * Suggestions intelligentes
+  * Auto-correction
+  * Optimisation SEO
+  * Validation intelligente
 
-3. Configurez le mapping (Étape 3) :
-   - Pour chaque colonne du modèle cible :
-     * Sélectionnez le fichier source
-     * Choisissez la colonne correspondante
-     * Indiquez si c'est une référence vers un autre modèle
-   - Le système gère automatiquement la génération des identifiants uniques
+### ⭐ Niveau Complet
+- Activé avec OpenAI et Kimaiko configurés
+- Toutes les fonctionnalités disponibles :
+  * Synchronisation Kimaiko
+  * Import/Export avancé
+  * Intégration complète
 
-4. Générez les fichiers :
-   - Cliquez sur "Générer et télécharger les résultats"
-   - Récupérez le fichier ZIP contenant tous les fichiers convertis
+## Modules Principaux
 
-### Mode Démo
+### 🎨 Conception / Collection
+- Création et configuration de collections
+- Structure de données personnalisée
+- Prévisualisation et validation
+- Export au format JSON
 
-Pour vous familiariser avec l'outil :
+### 🖥️ Front CMS
+- Configuration des composants visuels
+- Styles et mise en page
+- Prévisualisation en temps réel
+- Export des configurations
 
-1. Sélectionnez "Mode Démo"
-2. Suivez le guide pas à pas avec des exemples pré-configurés
-3. Observez comment les fichiers sont liés et convertis
+### 📥 Import / Clean Data
+- Import de fichiers Excel
+- Nettoyage et validation des données
+- Gestion des doublons et valeurs manquantes
+- Export des données traitées
+
+## Configuration des API
+
+### OpenAI API
+1. Visitez [OpenAI API](https://platform.openai.com/signup)
+2. Créez un compte ou connectez-vous
+3. Accédez à la section API Keys
+4. Créez une nouvelle clé API
+5. Configurez la clé dans l'application
+
+### Kimaiko API
+- Nécessite les informations de connexion Kimaiko :
+  * URL de l'API
+  * Identifiants de connexion
+- Contactez votre administrateur pour obtenir les accès
 
 ## Format des Fichiers
 
-### Fichiers Sources
+### Import de Données
 - Format accepté : Excel (.xlsx)
-- Pas de limite sur le nombre de fichiers
-- Structure libre des colonnes
-- Possibilité de définir des relations entre fichiers
+- Structure flexible des colonnes
+- Possibilité de traiter plusieurs fichiers
+- Validation automatique des données
 
-### Fichiers Générés
-- Fichiers Excel au format Kimaiko
-- Identifiants uniques (UUID) générés automatiquement
-- Relations entre fichiers préservées
-- Rapport de conversion inclus
-
-## Résultats
-
-Le système génère :
-1. Les fichiers convertis au format Kimaiko
-2. Un rapport détaillé du traitement
-3. Les statistiques de conversion (nombre de lignes, fichiers traités)
+### Export
+- Fichiers Excel nettoyés
+- Configurations JSON
+- Rapports de traitement détaillés
+- Statistiques de conversion
 
 ## Support
 
-En cas de problème :
-1. Vérifiez le format de vos fichiers Excel
-2. Consultez les messages d'erreur détaillés dans l'interface
-3. Assurez-vous que toutes les colonnes requises sont mappées
+Pour une utilisation optimale :
+1. Commencez avec les fonctionnalités de base
+2. Ajoutez la clé OpenAI pour les fonctionnalités IA
+3. Configurez Kimaiko pour l'intégration complète
+4. Consultez les messages d'aide dans l'interface
 
-Les fichiers de démonstration sont fournis comme exemples mais ne limitent pas les possibilités de l'outil.
+Les fonctionnalités sont automatiquement débloquées selon votre configuration, permettant une expérience progressive et adaptée à vos besoins.
+
+## Dépôt GitHub
+
+Pour contribuer au projet, suivez ces étapes :
+
+1. Clonez le dépôt :
+   ```
+   git clone <URL-du-dépôt>
+   ```
+
+2. Créez une nouvelle branche `dev` :
+   ```
+   git checkout -b dev
+   ```
+
+3. Faites vos modifications et ajoutez-les :
+   ```
+   git add .
+   ```
+
+4. Faites un commit avec un message descriptif :
+   ```
+   git commit -m "Votre message de commit"
+   ```
+
+5. Poussez la branche `dev` sur GitHub :
+   ```
+   git push origin dev

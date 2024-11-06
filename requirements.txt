@@ -20,3 +20,26 @@ typing-extensions==4.8.0
 
 # Memory optimization
 psutil==5.9.6
+
+# API integrations
+openai==1.3.5  # For OpenAI API integration
+requests==2.31.0  # For Kimaiko API requests
+python-dotenv==1.0.0  # For environment variables
+httpx==0.25.2  # Modern HTTP client with async support
+
+# Data validation
+pydantic==2.5.2  # For data validation and settings management
+email-validator==2.1.0.post1  # For email validation
+
+# Security
+python-jose[cryptography]==3.3.0  # For JWT handling
+bcrypt==4.0.1  # For password hashing
+
+# Error handling and logging
+loguru==0.7.2  # Better logging
+sentry-sdk==1.35.0  # Error tracking
+
+# Testing
+pytest==7.4.3  # For unit testing
+pytest-asyncio==0.21.1  # For async tests
+responses==0.24.1  # For mocking HTTP requests in tests

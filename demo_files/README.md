@@ -2,6 +2,25 @@
 
 Ce dossier contient les fichiers de test pour valider le fonctionnement de l'import Kimaiko.
 
+## Utilisation avec les Niveaux de Fonctionnalités
+
+Ces fichiers d'exemple peuvent être utilisés avec tous les niveaux de fonctionnalités :
+
+- 🌱 **Niveau Basic**
+  * Import/export de base
+  * Validation manuelle
+  * Nettoyage simple des données
+
+- 🤖 **Niveau OpenAI** (avec clé API OpenAI)
+  * Suggestions automatiques de mapping
+  * Validation intelligente des données
+  * Détection automatique des anomalies
+
+- ⭐ **Niveau Complet** (avec OpenAI et Kimaiko)
+  * Synchronisation directe avec Kimaiko
+  * Validation complète des références
+  * Import/export optimisé
+
 ## Modèles Kimaiko
 
 1. `fournisseurs.xlsx`
@@ -115,3 +134,17 @@ Les fichiers de démonstration permettent de tester :
 - Les nombres décimaux utilisent le point comme séparateur
 - Les UUID sont générés en format v4
 - Les références manquantes sont remplacées par des chaînes vides
+
+## Fonctionnalités Avancées
+
+Selon votre niveau de fonctionnalités, vous bénéficiez de capacités supplémentaires :
+
+### Validation Intelligente (Niveau OpenAI)
+- Détection automatique des anomalies dans les données
+- Suggestions de correction pour les valeurs invalides
+- Analyse de cohérence des relations
+
+### Synchronisation Kimaiko (Niveau Complet)
+- Validation en temps réel avec l'API Kimaiko
+- Vérification des contraintes métier
+- Import direct dans votre environnement Kimaiko
