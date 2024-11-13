@@ -132,77 +132,67 @@ def render_standard_mode():
     elif st.session_state.step == 3:
         st.markdown("""
         ### 🔗 Étape 3: Configuration du mapping
-        
-        Configurez la correspondance entre vos données sources et les modèles Kimaiko.
         """)
         
         if 'mappings' not in st.session_state:
             st.session_state.mappings = {}
+            
+        # Nouvelle version avec tabs et grille
+        tabs = st.tabs(list(st.session_state.kimaiko_templates.keys()))
         
-        for template_name, columns in st.session_state.kimaiko_templates.items():
-            st.subheader(f"Mapping pour {template_name}")
-            
-            if template_name not in st.session_state.mappings:
-                st.session_state.mappings[template_name] = {
-                    "ID": {"type": "uuid"}
-                }
-            
-            template_mapping = st.session_state.mappings[template_name]
-            
-            with st.expander(f"🔍 Configuration {template_name}"):
-                for col in columns:
-                    if col != "ID":  # Skip ID as it's always UUID
-                        st.markdown(f"#### {col}")
-                        
-                        # Source file selection
-                        source_file = st.selectbox(
-                            "Fichier source",
-                            options=list(st.session_state.source_files.keys()),
-                            key=f"{template_name}_{col}_file"
-                        )
-                        
-                        # Source column selection
-                        if source_file:
-                            source_columns = st.session_state.source_files[source_file]['columns']
-                            source_col = st.selectbox(
-                                "Colonne source",
-                                options=source_columns,
-                                key=f"{template_name}_{col}_column"
-                            )
-                            
-                            # Check if this is a reference field
-                            is_ref = st.checkbox(
-                                "Ce champ est une référence vers un autre modèle",
-                                key=f"{template_name}_{col}_is_ref"
-                            )
-                            
-                            if is_ref:
-                                ref_model = st.selectbox(
-                                    "Modèle référencé",
-                                    options=list(st.session_state.kimaiko_templates.keys()),
-                                    key=f"{template_name}_{col}_ref_model"
+        for idx, (template_name, columns) in enumerate(st.session_state.kimaiko_templates.items()):
+            with tabs[idx]:
+                if template_name not in st.session_state.mappings:
+                    st.session_state.mappings[template_name] = {"ID": {"type": "uuid"}}
+                
+                template_mapping = st.session_state.mappings[template_name]
+                
+                # Création d'une grille de 3 colonnes pour un affichage compact
+                for i in range(0, len(columns), 3):
+                    cols = st.columns(3)
+                    for j in range(3):
+                        if i + j < len(columns) and columns[i + j] != "ID":
+                            col = columns[i + j]
+                            with cols[j]:
+                                st.markdown(f"**{col}**")
+                                source_file = st.selectbox(
+                                    "Fichier source",
+                                    options=list(st.session_state.source_files.keys()),
+                                    key=f"{template_name}_{col}_file"
                                 )
                                 
-                                if ref_model:
-                                    ref_key = st.selectbox(
-                                        "Clé de référence",
-                                        options=st.session_state.kimaiko_templates[ref_model],
-                                        key=f"{template_name}_{col}_ref_key"
+                                if source_file:
+                                    source_columns = st.session_state.source_files[source_file]['columns']
+                                    source_col = st.selectbox(
+                                        "Colonne source",
+                                        options=source_columns,
+                                        key=f"{template_name}_{col}_column"
                                     )
                                     
-                                    template_mapping[col] = {
-                                        "source_file": source_file,
-                                        "source_col": source_col,
-                                        "is_ref": True,
-                                        "ref_model": ref_model,
-                                        "ref_key": ref_key
-                                    }
-                            else:
-                                template_mapping[col] = {
-                                    "source_file": source_file,
-                                    "source_col": source_col
-                                }
-        
+                                    is_ref = st.checkbox(
+                                        "Référence",
+                                        key=f"{template_name}_{col}_is_ref"
+                                    )
+                                    
+                                    if is_ref:
+                                        ref_model = st.selectbox(
+                                            "Modèle référencé",
+                                            options=list(st.session_state.kimaiko_templates.keys()),
+                                            key=f"{template_name}_{col}_ref_model"
+                                        )
+                                        template_mapping[col] = {
+                                            "source_file": source_file,
+                                            "source_col": source_col,
+                                            "is_ref": is_ref,
+                                            "ref_model": ref_model
+                                        }
+                                    else:
+                                        template_mapping[col] = {
+                                            "source_file": source_file,
+                                            "source_col": source_col,
+                                            "is_ref": is_ref
+                                        }
+
         # Generate files
         if st.button("✨ Générer et télécharger les résultats"):
             try:
@@ -210,11 +200,15 @@ def render_standard_mode():
                     logging.info("Début de la génération des fichiers")
                     logging.info(f"Mappings configurés: {st.session_state.mappings}")
                     
+                    # Calcul des statistiques avant la génération
+                    total_rows = sum(info['row_count'] for info in st.session_state.source_files.values())
+                    
+                    # Génération des fichiers sans les statistiques
                     zip_data = generate_kimaiko_files(st.session_state.mappings, st.session_state.source_files)
                     
                     st.success("✅ Fichiers générés avec succès!")
                     
-                    total_rows = sum(info['row_count'] for info in st.session_state.source_files.values())
+                    # Affichage des statistiques uniquement dans l'interface
                     st.info(f"📊 Statistiques:\n- {len(st.session_state.source_files):,} fichiers traités\n- {total_rows:,} lignes au total")
                     
                     st.download_button(

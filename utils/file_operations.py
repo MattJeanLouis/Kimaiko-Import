@@ -75,57 +75,69 @@ def optimize_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     except Exception as e:
         raise Exception(f"Erreur lors de l'optimisation du DataFrame: {str(e)}")
 
-def process_model_data(model_name: str, model_mappings: Dict, source_files: Dict) -> tuple[pd.DataFrame, Dict[str, str], Dict[str, int]]:
+def process_model_data(model_name: str, model_mappings: Dict, source_files: Dict, 
+                       existing_uuid_map: Optional[Dict[str, str]] = None) -> tuple[pd.DataFrame, Dict[str, str], Dict[str, int]]:
     """Process data for a single model, with proper memory management"""
     source_df = None
     final_df = None
     try:
         # Find the first mapping with a source file
         source_mapping = next((m for m in model_mappings.values() 
-                            if isinstance(m, dict) and "source_file" in m), None)
+                               if isinstance(m, dict) and "source_file" in m), None)
         if not source_mapping:
             logging.error(f"Aucun mapping source trouvé pour le modèle {model_name}")
             logging.error(f"Mappings disponibles: {model_mappings}")
             return None, None, None
-        
+
         logging.info(f"Traitement du modèle {model_name}")
         logging.info(f"Fichier source: {source_mapping['source_file']}")
-        
+
         if source_mapping["source_file"] not in source_files:
             logging.error(f"Fichier source '{source_mapping['source_file']}' non trouvé")
             logging.error(f"Fichiers sources disponibles: {list(source_files.keys())}")
             raise ValueError(f"Fichier source '{source_mapping['source_file']}' non trouvé")
-        
+
         source_df = source_files[source_mapping["source_file"]]["data"].copy()
         source_df = optimize_dataframe(source_df)
-        
+
         logging.info(f"Colonnes source disponibles: {source_df.columns.tolist()}")
-        
-        # Create DataFrame with UUIDs
-        final_df = pd.DataFrame(index=range(len(source_df)))
-        final_df["ID"] = [generate_uuid() for _ in range(len(source_df))]
-        
+
         # Create and verify UUID mapping
         key_col = source_mapping["source_col"]
         if key_col not in source_df.columns:
             logging.error(f"Colonne source '{key_col}' non trouvée dans {source_mapping['source_file']}")
             logging.error(f"Colonnes disponibles: {source_df.columns.tolist()}")
             raise ValueError(f"Colonne source '{key_col}' non trouvée")
-            
+
         values = source_df[key_col].values
-        uuid_map = create_uuid_mapping(values)
-        
+
+        # Utiliser le mapping UUID existant si fourni
+        if existing_uuid_map:
+            uuid_map = existing_uuid_map
+        else:
+            uuid_map = create_uuid_mapping(values)
+
+        # Assign UUIDs to final_df['ID'] using the uuid_map
+        final_df = pd.DataFrame(index=range(len(source_df)))
+        final_df["ID"] = source_df[key_col].map(uuid_map)
+
+        # Vérifier s'il y a des valeurs non mappées
+        if final_df["ID"].isna().any():
+            missing_values = source_df[final_df["ID"].isna()][key_col].unique()
+            logging.error(f"Les valeurs suivantes n'ont pas pu être mappées : {missing_values}")
+            raise ValueError(f"Certains UUID n'ont pas pu être mappés pour le modèle {model_name}")
+
         # Verify mapping integrity
         if not verify_mapping_integrity(uuid_map, values):
             logging.error(f"Échec de la vérification d'intégrité du mapping UUID pour {model_name}")
             logging.error(f"Valeurs uniques: {len(set(values))}")
             logging.error(f"UUIDs uniques: {len(set(uuid_map.values()))}")
             raise ValueError(f"Échec de la vérification d'intégrité du mapping UUID pour {model_name}")
-        
+
         # Get mapping statistics
         mapping_stats = get_mapping_stats(uuid_map, values)
         logging.info(f"Statistiques de mapping pour {model_name}: {mapping_stats}")
-        
+
         return final_df, uuid_map, mapping_stats
     except Exception as e:
         logging.error(f"Erreur lors du traitement du modèle {model_name}")
@@ -151,15 +163,24 @@ def map_multi_references(value: str, uuid_map: Dict[str, str]) -> str:
     if pd.isna(value):
         return ''
     
-    # Split the string by ", " and strip whitespace
-    refs = [ref.strip() for ref in str(value).split(", ")]
-    
-    # Map each reference to its UUID if it exists in the mapping
-    mapped_refs = [uuid_map.get(ref, '') for ref in refs]
-    
-    # Filter out empty strings and join with ", "
-    valid_refs = [ref for ref in mapped_refs if ref]
-    return ", ".join(valid_refs) if valid_refs else ''
+    try:
+        # Split the string by ", " and strip whitespace
+        refs = [ref.strip() for ref in str(value).split(", ")]
+        
+        # Map each reference to its UUID if it exists in the mapping
+        mapped_refs = []
+        for ref in refs:
+            uuid = uuid_map.get(ref)
+            if uuid:
+                mapped_refs.append(uuid)
+            else:
+                logging.warning(f"Référence non trouvée dans le mapping: '{ref}'")
+                logging.debug(f"Valeurs disponibles dans le mapping: {list(uuid_map.keys())[:5]}...")
+        
+        return ", ".join(mapped_refs) if mapped_refs else ''
+    except Exception as e:
+        logging.error(f"Erreur lors du mapping de la référence '{value}': {str(e)}")
+        return ''
 
 def process_model_references(final_df: pd.DataFrame, model_mappings: Dict, source_files: Dict, uuid_mappings: Dict) -> None:
     """Process references for a single model, with proper memory management"""
@@ -191,10 +212,22 @@ def process_model_references(final_df: pd.DataFrame, model_mappings: Dict, sourc
                     logging.error(f"Mapping UUID non trouvé pour le modèle référencé {ref_model}")
                     logging.error(f"Mappings UUID disponibles: {list(uuid_mappings.keys())}")
                     raise ValueError(f"Mapping UUID non trouvé pour le modèle référencé {ref_model}")
-                    
+                
+                # Log des informations de mapping pour le débogage
+                logging.info(f"Mapping de références pour {col} vers {ref_model}")
+                logging.info(f"Nombre de valeurs dans uuid_mappings[{ref_model}]: {len(uuid_mappings[ref_model])}")
+                logging.debug(f"Exemple de valeurs dans le mapping: {dict(list(uuid_mappings[ref_model].items())[:3])}")
+                
                 source_values = source_df[mapping["source_col"]]
-                # Use map_multi_references for handling multiple references in a single cell
+                # Log des valeurs source pour le débogage
+                logging.debug(f"Exemple de valeurs source: {source_values.head().tolist()}")
+                
                 final_df[col] = source_values.apply(lambda x: map_multi_references(x, uuid_mappings[ref_model]))
+                
+                # Vérification des valeurs non mappées
+                unmapped = source_values[final_df[col] == '']
+                if not unmapped.empty:
+                    logging.warning(f"Valeurs non mappées pour {col}: {unmapped.unique().tolist()[:5]}")
                 
                 # Log reference mapping statistics
                 total_refs = len(source_values)
@@ -224,8 +257,34 @@ def generate_kimaiko_files(mappings: Dict, source_files: Dict) -> bytes:
     temp_dir = None
     try:
         logging.info("Début de la génération des fichiers Kimaiko")
-        logging.info(f"Modèles à traiter: {list(mappings.keys())}")
-        logging.info(f"Fichiers sources disponibles: {list(source_files.keys())}")
+        
+        # Créer un dictionnaire global pour stocker tous les mappings UUID
+        global_uuid_mappings = {}
+        
+        # Analyser les dépendances pour déterminer l'ordre de traitement
+        processing_order = []
+        remaining_models = set(mappings.keys())
+        dependencies = {model: set() for model in mappings.keys()}
+        
+        # Construire le graphe de dépendances
+        for model, model_mappings in mappings.items():
+            for field_mapping in model_mappings.values():
+                if isinstance(field_mapping, dict) and field_mapping.get('is_ref'):
+                    dependencies[model].add(field_mapping['ref_model'])
+        
+        # Tri topologique
+        while remaining_models:
+            available = [m for m in remaining_models 
+                       if not dependencies[m].intersection(remaining_models)]
+            
+            if not available:
+                raise ValueError("Dépendances circulaires détectées")
+            
+            for model in sorted(available):
+                processing_order.append(model)
+                remaining_models.remove(model)
+        
+        logging.info(f"Ordre de traitement: {processing_order}")
         
         temp_dir = tempfile.mkdtemp()
         result_dir = Path(temp_dir) / "import_kimaiko"
@@ -237,28 +296,40 @@ def generate_kimaiko_files(mappings: Dict, source_files: Dict) -> bytes:
         uuid_mappings = {}
         mapping_stats = {}
         
-        # First pass: generate UUIDs for each model
-        for model_name in mappings.keys():
+        # Première passe : générer tous les UUIDs
+        for model_name in processing_order:
+            source_mapping = next((m for m in mappings[model_name].values() 
+                                if isinstance(m, dict) and "source_file" in m), None)
+            if source_mapping:
+                source_df = source_files[source_mapping["source_file"]]["data"]
+                key_col = source_mapping["source_col"]
+                values = source_df[key_col].values
+                if model_name not in global_uuid_mappings:
+                    global_uuid_mappings[model_name] = create_uuid_mapping(values)
+                    # Stocker aussi dans uuid_mappings pour la génération du fichier de références
+                    uuid_mappings[model_name] = global_uuid_mappings[model_name]
+        
+        # Deuxième passe : traiter les fichiers avec les UUIDs cohérents
+        for model_name in processing_order:
             logging.info(f"\nTraitement du modèle: {model_name}")
             final_df = None
             try:
-                final_df, uuid_map, stats = process_model_data(
+                final_df, _, stats = process_model_data(
                     model_name, 
                     mappings[model_name], 
-                    source_files
+                    source_files,
+                    existing_uuid_map=global_uuid_mappings[model_name]  # Utiliser le mapping existant
                 )
                 
                 if final_df is not None:
-                    uuid_mappings[model_name] = uuid_map
                     mapping_stats[model_name] = stats
                     
-                    logging.info(f"Traitement des références pour {model_name}")
-                    # Process references
+                    # Utiliser global_uuid_mappings au lieu de uuid_mappings
                     process_model_references(
                         final_df, 
                         mappings[model_name], 
                         source_files, 
-                        uuid_mappings
+                        global_uuid_mappings
                     )
                     
                     # Save optimized DataFrame
@@ -281,33 +352,32 @@ def generate_kimaiko_files(mappings: Dict, source_files: Dict) -> bytes:
                     del final_df
                 gc.collect()
         
-        # Create UUID mapping file with statistics
+        # Create UUID mapping file without statistics
         mapping_df = None
         try:
             mapping_dfs = []
-            for model_name, mapping in uuid_mappings.items():
+            for model_name, mapping in global_uuid_mappings.items():
+                if not mapping:
+                    logging.warning(f"Mapping vide pour le modèle {model_name}")
+                    continue
+                    
                 df = pd.DataFrame(list(mapping.items()), columns=['Valeur Originale', 'UUID'])
                 df['Modèle'] = model_name
-                
-                # Add statistics
-                stats = mapping_stats[model_name]
-                df_stats = pd.DataFrame([{
-                    'Valeur Originale': f"Statistiques {model_name}",
-                    'UUID': f"Total: {stats['total_values']}, Uniques: {stats['unique_values']}, "
-                           f"Mappés: {stats['mapped_values']}, NA: {stats['na_values']}"
-                }])
-                
                 mapping_dfs.append(df)
-                mapping_dfs.append(df_stats)
             
             if mapping_dfs:
                 mapping_df = pd.concat(mapping_dfs, ignore_index=True)
                 mapping_df = optimize_dataframe(mapping_df)
+                
+                output_path = result_dir / "references" / "references_uuid.xlsx"
                 mapping_df.to_excel(
-                    result_dir / "references" / "references_uuid.xlsx",
+                    output_path,
                     index=False,
                     engine='openpyxl'
                 )
+                logging.info(f"Fichier de références sauvegardé: {output_path}")
+            else:
+                logging.error("Aucune donnée de mapping à sauvegarder")
         except Exception as e:
             logging.error("Erreur lors de la création du fichier de mapping UUID")
             logging.error(f"Message d'erreur: {str(e)}")
