@@ -440,7 +440,85 @@ Retourne uniquement le CSV avec les attributs pertinents pour cette collection, 
         # Mettre à jour la session avec les modifications de l'utilisateur
         st.session_state['relations_collections'] = editable_relations.to_dict(orient='records')
 
+def phase5_generation_documentation():
+    st.header("Phase 4 : Génération de la documentation")
+    
+    # Vérifier que toutes les données nécessaires sont présentes
+    donnees_requises = {
+        'entreprise': "les informations de l'entreprise",
+        'description': "la description détaillée",
+        'elements_edites': "les éléments analysés",
+        'collections_generees': "les collections",
+        'details_collections': "les détails des collections",
+        'relations_collections': "les relations entre collections"
+    }
+    
+    manquantes = [desc for key, desc in donnees_requises.items() if key not in st.session_state]
+    
+    if manquantes:
+        st.warning(f"Veuillez d'abord compléter les phases précédentes. Il manque : {', '.join(manquantes)}")
+        return
+        
+    if st.button("Générer la documentation"):
+        with st.spinner("Génération de la documentation en cours..."):
+            # Préparation des données pour le prompt
+            elements_str = "\n".join([f"{k}: {v}" for k, v in st.session_state['elements_edites'].items()])
+            collections_str = json.dumps(st.session_state['collections_generees'], indent=2, ensure_ascii=False)
+            relations_str = json.dumps(st.session_state['relations_collections'], indent=2, ensure_ascii=False)
+            
+            # Construction du prompt pour la documentation
+            prompt_doc = f"""En tant qu'expert en documentation technique, génère une documentation complète au format Markdown pour le système CRM suivant :
+
+Entreprise : {st.session_state['entreprise']}
+
+Description : {st.session_state['description']}
+
+Éléments clés :
+{elements_str}
+
+Collections :
+{collections_str}
+
+Relations :
+{relations_str}
+
+Structure détaillée des collections :
+"""
+            # Ajouter les détails de chaque collection
+            for nom, df in st.session_state['details_collections'].items():
+                prompt_doc += f"\n### Collection : {nom}\n"
+                prompt_doc += "```\n"
+                prompt_doc += df.to_string()
+                prompt_doc += "\n```\n"
+
+            prompt_doc += "\n\nGénère une documentation technique complète au format Markdown incluant :\n"
+            prompt_doc += "1. Vue d'ensemble du système\n"
+            prompt_doc += "2. Architecture des données\n"
+            prompt_doc += "3. Description détaillée des collections\n"
+            prompt_doc += "4. Relations et dépendances\n"
+            prompt_doc += "5. Contraintes et règles métier\n"
+            prompt_doc += "6. Recommandations d'implémentation\n"
+
+            # Appel à l'API pour générer la documentation
+            documentation = faire_requete_chatgpt(prompt_doc)
+            
+            if documentation:
+                st.session_state['documentation'] = documentation
+                st.success("Documentation générée avec succès")
+                
+                # Afficher la documentation
+                st.markdown(documentation)
+                
+                # Bouton pour télécharger la documentation
+                st.download_button(
+                    label="Télécharger la documentation (MD)",
+                    data=documentation,
+                    file_name="documentation_crm.md",
+                    mime="text/markdown"
+                )
+
 # Appel des fonctions principales
 phase2_collecte_informations()
 phase3_Traitement_initial_collection()
 phase4_collections_detail()
+phase5_generation_documentation()
