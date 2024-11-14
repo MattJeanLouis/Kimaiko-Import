@@ -1,0 +1,14 @@
+# Ignorer tout
+*
+
+# Mais garder ces fichiers et dossiers
+!*.py
+!README.md
+!requirements.txt
+!Dockerfile
+!utils/
+!utils/**/*.py
+
+# Quand même ignorer les fichiers compilés Python
+__pycache__/
+*.pyc
