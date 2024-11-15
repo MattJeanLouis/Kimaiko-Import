@@ -522,3 +522,6 @@ phase2_collecte_informations()
 phase3_Traitement_initial_collection()
 phase4_collections_detail()
 phase5_generation_documentation()
+
+
+
