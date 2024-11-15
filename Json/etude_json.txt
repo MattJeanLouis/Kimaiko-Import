@@ -1,0 +1,121 @@
+# Structure globale : Liste de 9 éléments principaux
+├── Liste de 9 éléments
+    # 1. Définition d'une collection (table de données)
+    ├── collection
+    │   ├── uuid            # Identifiant unique de la collection
+    │   ├── index          # Position/ordre de la collection
+    │   ├── name           # Nom de la collection
+    │   ├── description    # Description de la collection
+    │   # Définition des champs de la collection
+    │   ├── fields
+    │   │   ├── Liste de 17 éléments  # Chaque champ contient :
+    │   │   │   ├── name              # Nom du champ
+    │   │   │   ├── type              # Type de données
+    │   │   │   ├── id                # Identifiant unique du champ
+    │   │   │   ├── mandatory         # Champ obligatoire ou non
+    │   │   │   ├── defaultValue      # Valeur par défaut
+    │   │   │   ├── tagValues         # Valeurs possibles (pour les listes)
+    │   │   │   │   ├── Liste de 1 éléments
+    │   ├── allowedGroups   # Groupes autorisés à accéder à la collection
+    │   │   ├── Liste de 0 éléments
+    │   ├── ref             # Référence interne de la collection
+    │   ├── lastIndex       # Dernier index utilisé
+    │   ├── archived        # État d'archivage
+
+    # 2. Définition d'une page (interface utilisateur)
+    ├── page
+    │   ├── uuid            # Identifiant unique de la page
+    │   ├── index          # Position/ordre de la page
+    │   ├── name           # Nom de la page
+    │   ├── icon           # Icône de la page
+    │   ├── description    # Description de la page
+    │   # Configuration du contenu de la page
+    │   ├── content
+    │   │   ├── Liste de 1 éléments
+    │   │   │   ├── type           # Type de contenu
+    │   │   │   ├── title          # Titre du contenu
+    │   │   │   # Configuration détaillée de l'affichage
+    │   │   │   ├── config
+    │   │   │   │   ├── detailContent
+    │   │   │   │   │   ├── Liste de 3 éléments
+    │   │   │   │   │   │   # Configuration de la fiche détaillée
+    │   │   │   │   │   │   ├── FICHE
+    │   │   │   │   │   │   │   ├── Liste de 1 éléments
+    │   │   │   │   │   │   │   │   ├── id                      # ID du composant
+    │   │   │   │   │   │   │   │   ├── type                    # Type de composant
+    │   │   │   │   │   │   │   │   ├── icon                    # Icône du composant
+    │   │   │   │   │   │   │   │   ├── content                 # Contenu
+    │   │   │   │   │   │   │   │   ├── isStatic               # Composant statique ou non
+    │   │   │   │   │   │   │   │   # Paramètres d'affichage de l'en-tête
+    │   │   │   │   │   │   │   │   ├── arrayHeaderBackground
+    │   │   │   │   │   │   │   │   ├── arrayHeaderColor
+    │   │   │   │   │   │   │   │   ├── showShadow
+    │   │   │   │   │   │   │   │   ├── arrayHeaderShow
+    │   │   │   │   │   │   │   │   ├── arrayHeaderShowBorder
+    │   │   │   │   │   │   │   │   ├── showScroll
+    │   │   │   │   │   │   │   │   ├── arrayBodyShow
+    │   │   │   │   │   │   │   │   # Styles CSS du composant
+    │   │   │   │   │   │   │   │   ├── style
+    │   │   │   │   │   │   │   │   │   ├── display
+    │   │   │   │   │   │   │   │   │   ├── justifyContent
+    │   │   │   │   │   │   │   │   │   ├── alignItems
+    │   │   │   │   │   │   │   │   │   ├── alignContent
+    │   │   │   │   │   │   │   │   │   ├── flexDirection
+    │   │   │   │   │   │   │   │   │   ├── height
+    │   │   │   │   │   │   │   │   │   ├── width
+    │   │   │   │   │   │   │   │   │   ├── top
+    │   │   │   │   │   │   │   │   │   ├── left
+    │   │   │   │   │   │   │   │   │   ├── color
+    │   │   │   │   │   │   │   │   │   ├── background
+    │   │   │   │   │   │   │   │   │   # Marges
+    │   │   │   │   │   │   │   │   │   ├── marginTop
+    │   │   │   │   │   │   │   │   │   ├── marginRight
+    │   │   │   │   │   │   │   │   │   ├── marginBottom
+    │   │   │   │   │   │   │   │   │   ├── marginLeft
+    │   │   │   │   │   │   │   │   │   # Padding
+    │   │   │   │   │   │   │   │   │   ├── paddingTop
+    │   │   │   │   │   │   │   │   │   ├── paddingRight
+    │   │   │   │   │   │   │   │   │   ├── paddingBottom
+    │   │   │   │   │   │   │   │   │   ├── paddingLeft
+    │   │   │   │   │   │   │   │   │   # Bordures et mise en page
+    │   │   │   │   │   │   │   │   │   ├── borderWidth
+    │   │   │   │   │   │   │   │   │   ├── borderColor
+    │   │   │   │   │   │   │   │   │   ├── flexWrap
+    │   │   │   │   │   │   │   │   │   ├── gap
+    │   │   │   │   │   │   │   │   │   ├── flexGrow
+    │   │   │   │   │   │   │   │   │   ├── borderRadius
+    │   │   │   │   │   │   │   │   │   ├── alignSelf
+    │   │   │   │   │   │   │   │   ├── fieldId        # ID du champ associé
+    │   │   │   │   │   │   │   │   ├── isSelected     # État de sélection
+    │   │   │   │   │   │   │   │   ├── children       # Composants enfants
+    │   │   │   │   │   │   │   │   │   ├── Liste de 1 éléments
+    │   ├── entities        # Collections liées à la page
+    │   │   ├── Liste de 1 éléments
+    │   ├── allowedGroups   # Groupes autorisés
+    │   │   ├── Liste de 0 éléments
+    │   ├── archived        # État d'archivage
+    │   ├── pageGroupId     # ID du groupe de pages
+    │   ├── pageGroup       # Groupe de pages
+
+    # 3. Gestion des droits et rôles
+    ├── uuid               # ID unique du rôle
+    ├── type              # Type de rôle
+    ├── roles             # Définition des rôles
+    │   # Premier rôle
+    │   ├── 9ea8305f-8140-4e2b-a8da-931280d32223
+    │   │   ├── create         # Droit de création
+    │   │   ├── read          # Droit de lecture
+    │   │   ├── update        # Droit de modification
+    │   │   ├── delete        # Droit de suppression
+    │   │   ├── pageId        # Page concernée
+    │   │   ├── visibleFields # Champs visibles
+    │   │   │   ├── Liste de 17 éléments
+    │   # Second rôle
+    │   ├── e681c2f9-aea5-44e1-a7f2-79e9a2066921
+    │   │   ├── create
+    │   │   ├── read
+    │   │   ├── update
+    │   │   ├── delete
+    │   │   ├── pageId
+    │   │   ├── visibleFields
+    │   │   │   ├── Liste de 17 éléments

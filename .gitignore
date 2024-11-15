@@ -8,6 +8,9 @@
 !Dockerfile
 !utils/
 !utils/**/*.py
+!json/
+!json/**
+
 
 # Quand même ignorer les fichiers compilés Python
 __pycache__/

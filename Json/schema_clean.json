@@ -1,0 +1,810 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "collection": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "mandatory": {
+                  "type": "boolean"
+                },
+                "defaultValue": {
+                  "type": "string"
+                },
+                "tagValues": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "displayFields": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "mandatory": {
+                                  "type": "boolean"
+                                },
+                                "defaultValue": {
+                                  "type": "string"
+                                },
+                                "tagValues": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "displayFields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "mandatory": {
+                                        "type": "boolean"
+                                      },
+                                      "defaultValue": {
+                                        "type": "string"
+                                      },
+                                      "tagValues": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "type"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "defaultValue",
+                                "id",
+                                "mandatory",
+                                "name",
+                                "type"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "computeType": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "type"
+              ]
+            }
+          },
+          "foreignId": {
+            "type": "string"
+          },
+          "displayFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isRealTimeData": {
+            "type": "boolean"
+          },
+          "optionalValues": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "displayFields": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "tagValues": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "displayFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "mandatory": {
+                                "type": "boolean"
+                              },
+                              "defaultValue": {
+                                "type": "string"
+                              },
+                              "tagValues": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "type"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [
+              "displayFields",
+              "type"
+            ]
+          },
+          "allowedGroups": {
+            "type": "array"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "lastIndex": {
+            "type": "integer"
+          },
+          "archived": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "allowedGroups",
+          "archived",
+          "description",
+          "fields",
+          "index",
+          "lastIndex",
+          "name",
+          "ref",
+          "uuid"
+        ]
+      },
+      "page": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "config": {
+                  "type": "object",
+                  "properties": {
+                    "detailContent": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "FICHE": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "icon": {
+                                  "type": "string"
+                                },
+                                "content": {
+                                  "type": "string"
+                                },
+                                "isStatic": {
+                                  "type": "boolean"
+                                },
+                                "arrayHeaderBackground": {
+                                  "type": "string"
+                                },
+                                "arrayHeaderColor": {
+                                  "type": "string"
+                                },
+                                "showShadow": {
+                                  "type": "boolean"
+                                },
+                                "arrayHeaderShow": {
+                                  "type": "boolean"
+                                },
+                                "arrayHeaderShowBorder": {
+                                  "type": "boolean"
+                                },
+                                "showScroll": {
+                                  "type": "boolean"
+                                },
+                                "arrayBodyShow": {
+                                  "type": "boolean"
+                                },
+                                "style": {
+                                  "type": "object",
+                                  "properties": {
+                                    "display": {
+                                      "type": "string"
+                                    },
+                                    "justifyContent": {
+                                      "type": "string"
+                                    },
+                                    "alignItems": {
+                                      "type": "string"
+                                    },
+                                    "alignContent": {
+                                      "type": "string"
+                                    },
+                                    "flexDirection": {
+                                      "type": "string"
+                                    },
+                                    "height": {
+                                      "type": "string"
+                                    },
+                                    "width": {
+                                      "type": "string"
+                                    },
+                                    "top": {
+                                      "type": "integer"
+                                    },
+                                    "left": {
+                                      "type": "integer"
+                                    },
+                                    "color": {
+                                      "type": "string"
+                                    },
+                                    "background": {
+                                      "type": "string"
+                                    },
+                                    "marginTop": {
+                                      "type": "integer"
+                                    },
+                                    "marginRight": {
+                                      "type": "integer"
+                                    },
+                                    "marginBottom": {
+                                      "type": "integer"
+                                    },
+                                    "marginLeft": {
+                                      "type": "integer"
+                                    },
+                                    "paddingTop": {
+                                      "type": "integer"
+                                    },
+                                    "paddingRight": {
+                                      "type": "integer"
+                                    },
+                                    "paddingBottom": {
+                                      "type": "integer"
+                                    },
+                                    "paddingLeft": {
+                                      "type": "integer"
+                                    },
+                                    "borderWidth": {
+                                      "type": "integer"
+                                    },
+                                    "borderColor": {
+                                      "type": "string"
+                                    },
+                                    "flexWrap": {
+                                      "type": "string"
+                                    },
+                                    "gap": {
+                                      "type": "integer"
+                                    },
+                                    "flexGrow": {
+                                      "type": "integer"
+                                    },
+                                    "borderRadius": {
+                                      "type": "integer"
+                                    },
+                                    "alignSelf": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "alignContent",
+                                    "alignItems",
+                                    "alignSelf",
+                                    "background",
+                                    "borderColor",
+                                    "borderRadius",
+                                    "borderWidth",
+                                    "color",
+                                    "display",
+                                    "flexDirection",
+                                    "flexGrow",
+                                    "flexWrap",
+                                    "gap",
+                                    "height",
+                                    "justifyContent",
+                                    "left",
+                                    "marginBottom",
+                                    "marginLeft",
+                                    "marginRight",
+                                    "marginTop",
+                                    "paddingBottom",
+                                    "paddingLeft",
+                                    "paddingRight",
+                                    "paddingTop",
+                                    "top",
+                                    "width"
+                                  ]
+                                },
+                                "fieldId": {
+                                  "type": "string"
+                                },
+                                "isSelected": {
+                                  "type": "boolean"
+                                },
+                                "children": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "string"
+                                      },
+                                      "fieldId": {
+                                        "type": "string"
+                                      },
+                                      "isStatic": {
+                                        "type": "boolean"
+                                      },
+                                      "icon": {
+                                        "type": "string"
+                                      },
+                                      "isSelected": {
+                                        "type": "boolean"
+                                      },
+                                      "style": {
+                                        "type": "object",
+                                        "properties": {
+                                          "display": {
+                                            "type": "string"
+                                          },
+                                          "justifyContent": {
+                                            "type": "string"
+                                          },
+                                          "alignItems": {
+                                            "type": "string"
+                                          },
+                                          "alignContent": {
+                                            "type": "string"
+                                          },
+                                          "flexDirection": {
+                                            "type": "string"
+                                          },
+                                          "height": {
+                                            "type": "string"
+                                          },
+                                          "width": {
+                                            "type": "string"
+                                          },
+                                          "top": {
+                                            "type": "integer"
+                                          },
+                                          "left": {
+                                            "type": "integer"
+                                          },
+                                          "color": {
+                                            "type": "string"
+                                          },
+                                          "background": {
+                                            "type": "string"
+                                          },
+                                          "marginTop": {
+                                            "type": "integer"
+                                          },
+                                          "marginRight": {
+                                            "type": "integer"
+                                          },
+                                          "marginBottom": {
+                                            "type": "integer"
+                                          },
+                                          "marginLeft": {
+                                            "type": "integer"
+                                          },
+                                          "paddingTop": {
+                                            "type": "integer"
+                                          },
+                                          "paddingRight": {
+                                            "type": "integer"
+                                          },
+                                          "paddingBottom": {
+                                            "type": "integer"
+                                          },
+                                          "paddingLeft": {
+                                            "type": "integer"
+                                          },
+                                          "borderWidth": {
+                                            "type": "integer"
+                                          },
+                                          "borderColor": {
+                                            "type": "string"
+                                          },
+                                          "flexWrap": {
+                                            "type": "string"
+                                          },
+                                          "gap": {
+                                            "type": "integer"
+                                          },
+                                          "flexGrow": {
+                                            "type": "integer"
+                                          },
+                                          "borderRadius": {
+                                            "type": "integer"
+                                          },
+                                          "alignSelf": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "alignContent",
+                                          "alignItems",
+                                          "alignSelf",
+                                          "background",
+                                          "borderColor",
+                                          "borderRadius",
+                                          "borderWidth",
+                                          "color",
+                                          "display",
+                                          "flexDirection",
+                                          "flexGrow",
+                                          "flexWrap",
+                                          "gap",
+                                          "height",
+                                          "justifyContent",
+                                          "left",
+                                          "marginBottom",
+                                          "marginLeft",
+                                          "marginRight",
+                                          "marginTop",
+                                          "paddingBottom",
+                                          "paddingLeft",
+                                          "paddingRight",
+                                          "paddingTop",
+                                          "top",
+                                          "width"
+                                        ]
+                                      },
+                                      "children": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            },
+                                            "content": {
+                                              "type": "string"
+                                            },
+                                            "fieldId": {
+                                              "type": "string"
+                                            },
+                                            "isStatic": {
+                                              "type": "boolean"
+                                            },
+                                            "icon": {
+                                              "type": "string"
+                                            },
+                                            "isSelected": {
+                                              "type": "boolean"
+                                            },
+                                            "style": {
+                                              "type": "object",
+                                              "properties": {
+                                                "height": {
+                                                  "type": "string"
+                                                },
+                                                "width": {
+                                                  "type": "string"
+                                                },
+                                                "top": {
+                                                  "type": "integer"
+                                                },
+                                                "left": {
+                                                  "type": "integer"
+                                                },
+                                                "color": {
+                                                  "type": "string"
+                                                },
+                                                "background": {
+                                                  "type": "string"
+                                                },
+                                                "fontSize": {
+                                                  "type": "integer"
+                                                },
+                                                "fontWeight": {
+                                                  "type": "string"
+                                                },
+                                                "fontStyle": {
+                                                  "type": "string"
+                                                },
+                                                "fontFamily": {
+                                                  "type": "string"
+                                                },
+                                                "textAlign": {
+                                                  "type": "string"
+                                                },
+                                                "marginTop": {
+                                                  "type": "integer"
+                                                },
+                                                "marginRight": {
+                                                  "type": "integer"
+                                                },
+                                                "marginBottom": {
+                                                  "type": "integer"
+                                                },
+                                                "marginLeft": {
+                                                  "type": "integer"
+                                                },
+                                                "paddingTop": {
+                                                  "type": "integer"
+                                                },
+                                                "paddingRight": {
+                                                  "type": "integer"
+                                                },
+                                                "paddingBottom": {
+                                                  "type": "integer"
+                                                },
+                                                "paddingLeft": {
+                                                  "type": "integer"
+                                                },
+                                                "borderWidth": {
+                                                  "type": "integer"
+                                                },
+                                                "borderColor": {
+                                                  "type": "string"
+                                                },
+                                                "display": {
+                                                  "type": "string"
+                                                },
+                                                "justifyContent": {
+                                                  "type": "string"
+                                                },
+                                                "alignItems": {
+                                                  "type": "string"
+                                                },
+                                                "alignContent": {
+                                                  "type": "string"
+                                                },
+                                                "flexDirection": {
+                                                  "type": "string"
+                                                },
+                                                "flexWrap": {
+                                                  "type": "string"
+                                                },
+                                                "gap": {
+                                                  "type": "integer"
+                                                },
+                                                "flexGrow": {
+                                                  "type": "integer"
+                                                },
+                                                "borderRadius": {
+                                                  "type": "integer"
+                                                },
+                                                "alignSelf": {
+                                                  "type": "string"
+                                                },
+                                                "columns": {
+                                                  "type": "integer"
+                                                },
+                                                "flex": {
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [
+                                                "fontSize"
+                                              ]
+                                            },
+                                            "children": {
+                                              "type": "array"
+                                            },
+                                            "arrayHeaderBackground": {
+                                              "type": "string"
+                                            },
+                                            "arrayHeaderColor": {
+                                              "type": "string"
+                                            },
+                                            "arrayHeaderShow": {
+                                              "type": "boolean"
+                                            },
+                                            "arrayHeaderShowBorder": {
+                                              "type": "boolean"
+                                            },
+                                            "showScroll": {
+                                              "type": "boolean"
+                                            },
+                                            "arrayBodyShow": {
+                                              "type": "boolean"
+                                            },
+                                            "required": [
+                                              "children",
+                                              "content",
+                                              "fieldId",
+                                              "icon",
+                                              "id",
+                                              "isSelected",
+                                              "isStatic",
+                                              "style",
+                                              "type"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "children",
+                                "content",
+                                "fieldId",
+                                "icon",
+                                "id",
+                                "isSelected",
+                                "isStatic",
+                                "style",
+                                "type"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "children",
+          "content",
+          "fieldId",
+          "icon",
+          "id",
+          "isSelected",
+          "isStatic",
+          "style",
+          "type"
+        ]
+      }
+    }
+  }
+}
